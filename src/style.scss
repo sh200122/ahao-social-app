@@ -1,0 +1,64 @@
+$themes: (
+  light: (
+    textColor: #000,
+    bg: white,
+    logo: darkblue,
+    bgSoft: #f6f3f3,
+    textColorSoft: #555,
+    border: lightgray,
+  ),
+  dark: (
+    textColor: whitesmoke,
+    bg: #222,
+    logo: white,
+    bgSoft: #333,
+    textColorSoft: lightgray,
+    border: #444,
+  ),
+);
+
+// 定义 themify 混合宏，用于应用不同的主题样式
+@mixin themify($themes) {
+  // 循环遍历每个主题（light 和 dark）
+  @each $theme, $map in $themes {
+    // 生成对应主题的 CSS 类，例如 .theme-light 和 .theme-dark
+    .theme-#{$theme} & {
+      $theme-map: () !global; // 初始化一个全局的主题映射变量
+      // 循环遍历当前主题的每个样式属性
+      @each $key, $submap in $map {
+        // 获取当前主题下的样式属性值
+        $value: map-get(map-get($themes, $theme), "#{$key}");
+        // 将样式属性和值添加到全局主题映射中
+        $theme-map: map-merge(
+          $theme-map,
+          (
+            $key: $value,
+          )
+        ) !global;
+      }
+      @content; // 插入在使用此混合宏时传入的内容
+      $theme-map: null !global; // 清除全局主题映射变量
+    }
+  }
+}
+
+// 定义 themed 函数，用于获取当前主题下的样式属性值
+@function themed($key) {
+  @return map-get($theme-map, $key); // 从全局主题映射中获取对应的样式属性值
+}
+
+// 定义 mobile 混合宏，用于应用移动设备下的样式
+@mixin mobile {
+  @media (max-width: 480px) {
+    // 当屏幕宽度小于或等于 480px 时应用样式
+    @content;
+  }
+}
+
+// 定义 tablet 混合宏，用于应用平板设备下的样式
+@mixin tablet {
+  @media (max-width: 960px) {
+    // 当屏幕宽度小于或等于 960px 时应用样式
+    @content;
+  }
+}

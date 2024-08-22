@@ -10,8 +10,24 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.13.3",
+    "@emotion/styled": "^11.13.0",
+    "@mui/icons-material": "^5.16.7",
+    "@mui/material": "^5.16.7",
+    "@tanstack/react-query": "^5.52.0",
+    "@testing-library/jest-dom": "^6.4.8",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
+    "antd": "^5.20.2",
+    "axios": "^1.7.4",
+    "moment": "^2.30.1",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.1",
+    "react-scripts": "^5.0.1",
+    "sass": "^1.77.8",
+    "swiper": "^11.1.10",
+    "web-vitals": "^4.2.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
