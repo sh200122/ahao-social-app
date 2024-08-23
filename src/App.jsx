@@ -1,4 +1,3 @@
-// 引入模块
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import {
@@ -12,16 +11,18 @@ import LeftBar from "./components/leftBar/LeftBar";
 import RightBar from "./components/rightBar/RightBar";
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
+import Search from "./pages/search/Search";
 import "./style.scss";
 import { useContext } from "react";
-import { DarkModeContext } from "./context/darkModeContext.jsx";
-import { AuthContext } from "./context/authContext.jsx";
+import { DarkModeContext } from "./context/darkModeContext";
+import { AuthContext } from "./context/authContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
   const { currentUser } = useContext(AuthContext);
   const { darkMode } = useContext(DarkModeContext);
   const queryClient = new QueryClient();
+
   const Layout = () => {
     return (
       <QueryClientProvider client={queryClient}>
@@ -50,19 +51,23 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: (
-        <ProtectedRoute>
-          <Layout />
-        </ProtectedRoute>
-      ),
+      element: <Layout />,
       children: [
         {
           path: "/",
-          element: <Home />,
+          element: <Home />, // 首页不需要保护，用户可以直接访问
         },
         {
           path: "/profile/:id",
-          element: <Profile />,
+          element: (
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          ), // Profile 页面需要登录保护
+        },
+        {
+          path: "/search",
+          element: <Search />,
         },
       ],
     },

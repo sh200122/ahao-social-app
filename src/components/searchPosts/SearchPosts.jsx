@@ -1,12 +1,15 @@
 import Post from "../post/Post"; // 导入 Post 组件
-import "./posts.scss";
+import "./searchPosts.scss";
 import { useQuery } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 
-const Posts = () => {
+const SearchPosts = ({ searchQuery }) => {
   const { data, error, isLoading } = useQuery({
-    queryKey: ["posts"],
-    queryFn: () => makeRequest.get("/posts").then((res) => res.data),
+    queryKey: ["posts", searchQuery],
+    queryFn: () =>
+      makeRequest
+        .get(`/posts/search?keyword=${encodeURIComponent(searchQuery)}`)
+        .then((res) => res.data),
   });
 
   if (isLoading) {
@@ -22,10 +25,10 @@ const Posts = () => {
       {data && data.length > 0 ? (
         data.map((post) => <Post post={post} key={post.id} />)
       ) : (
-        <p>暂无帖子</p>
+        <p>暂无相关内容</p>
       )}
     </div>
   );
 };
 
-export default Posts;
+export default SearchPosts;

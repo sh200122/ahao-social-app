@@ -12,7 +12,7 @@ import Messages from "../../assets/10.png";
 import Tutorials from "../../assets/11.png";
 import Courses from "../../assets/12.png";
 import Fund from "../../assets/13.png";
-import { AuthContext } from "../../context/authContext.jsx";
+import { AuthContext } from "../../context/authContext";
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 
@@ -24,12 +24,17 @@ const LeftBar = ({ post }) => {
       <div className="container">
         <div className="menu">
           <div className="user">
-            <img src={"/upload/" + currentUser.profilePic} alt="" />
+            {currentUser && ( // 确保 currentUser 存在时才渲染用户头像
+              <img src={"/upload/" + currentUser.profilePic} alt="Profile" />
+            )}
             <Link
-              to={`/profile/${currentUser.id}`}
+              to={`/profile/${currentUser ? currentUser.id : "Guest"}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
-              <span>{currentUser.name}</span>
+              <span>
+                {currentUser ? currentUser.name : <button>点击登录</button>}
+              </span>{" "}
+              {/* 确保显示用户名称或替代文本 */}
             </Link>
           </div>
           <div className="item">

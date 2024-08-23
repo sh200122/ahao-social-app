@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
 import "./comments.scss";
-import { AuthContext } from "../../context/authContext.jsx";
+import { AuthContext } from "../../context/authContext";
 import { makeRequest } from "../../axios";
 import moment from "moment";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { message } from "antd";
 
 const Comments = ({ postId }) => {
   const [desc, setDesc] = useState("");
@@ -29,6 +30,10 @@ const Comments = ({ postId }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
+    if (!desc.trim()) {
+      message.warning("内容不能为空！");
+      return;
+    }
     mutation.mutate({ desc, postId });
     setDesc("");
   };
@@ -36,7 +41,9 @@ const Comments = ({ postId }) => {
   return (
     <div className="comments">
       <div className="write">
-        <img src={"/upload/" + currentUser.profilePic} alt="" />
+        {currentUser && ( // 确保 currentUser 存在时才渲染用户头像
+          <img src={"/upload/" + currentUser.profilePic} alt="Profile" />
+        )}
         <input
           type="text"
           placeholder="输入一条评论"
@@ -50,7 +57,9 @@ const Comments = ({ postId }) => {
         ? "加载中..."
         : data.map((comment) => (
             <div className="comment" key={comment.id}>
-              <img src={"/upload/" + comment.profilePic} alt="" />
+              {currentUser && ( // 确保 currentUser 存在时才渲染用户头像
+                <img src={"/upload/" + currentUser.profilePic} alt="Profile" />
+              )}
               <div className="info">
                 <span>{comment.name}</span>
                 <p>{comment.desc}</p>

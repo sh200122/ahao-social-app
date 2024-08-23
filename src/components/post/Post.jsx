@@ -11,20 +11,26 @@ import moment from "moment";
 import "moment/locale/zh-cn";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import { AuthContext } from "../../context/authContext.jsx";
+import { AuthContext } from "../../context/authContext";
+import React from "react";
+import { Alert } from "antd";
 
 const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(false); // 控制提示框的显示
+  const [alertMessage, setAlertMessage] = useState(""); // 控制提示框的信息
 
   const { currentUser } = useContext(AuthContext);
 
+  // 获取帖子的点赞数据
   const { isLoading: isLikesLoading, data: likesData } = useQuery({
     queryKey: ["likes", post.id],
     queryFn: () =>
       makeRequest.get("/likes?postId=" + post.id).then((res) => res.data),
   });
 
+  // 获取帖子的评论数据
   const { isLoading: isCommentsLoading, data: commentsData } = useQuery({
     queryKey: ["comments", post.id],
     queryFn: () =>
@@ -33,6 +39,7 @@ const Post = ({ post }) => {
 
   const queryClient = useQueryClient();
 
+  // 点赞或取消点赞的请求
   const likeMutation = useMutation({
     mutationFn: (liked) => {
       if (liked) return makeRequest.delete("/likes?postId=" + post.id);
@@ -43,6 +50,7 @@ const Post = ({ post }) => {
     },
   });
 
+  // 删除帖子的请求
   const deleteMutation = useMutation({
     mutationFn: (postId) => {
       return makeRequest.delete("/posts/" + postId);
@@ -52,12 +60,47 @@ const Post = ({ post }) => {
     },
   });
 
+  // 处理点赞的点击事件
   const handleLike = () => {
-    likeMutation.mutate(likesData?.includes(currentUser.id));
+    if (currentUser) {
+      likeMutation.mutate(likesData?.includes(currentUser.id));
+    } else {
+      setAlertMessage("请先登录再进行点赞操作！");
+      setAlertVisible(true);
+    }
   };
 
+  // 处理删除帖子的点击事件
   const handleDelete = () => {
-    deleteMutation.mutate(post.id);
+    if (currentUser?.id === post.userId) {
+      deleteMutation.mutate(post.id);
+    } else if (!currentUser) {
+      setAlertMessage("请先登录再删除此帖子！");
+      setAlertVisible(true);
+    } else {
+      alert("你没有权限删除此帖子！");
+    }
+  };
+
+  // 处理评论的点击事件
+  const handleCommentClick = () => {
+    if (currentUser) {
+      setCommentOpen(!commentOpen);
+    } else {
+      setAlertMessage("请先登录再进行评论！");
+      setAlertVisible(true);
+    }
+  };
+
+  // 处理分享的点击事件
+  const handleShareClick = () => {
+    if (!currentUser) {
+      setAlertMessage("请先登录再进行分享！");
+      setAlertVisible(true);
+    } else {
+      setAlertMessage("分享功能待实现！");
+      setAlertVisible(true);
+    }
   };
 
   return (
@@ -76,12 +119,14 @@ const Post = ({ post }) => {
               <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
-          <MoreHorizIcon
-            onClick={() => {
-              setMenuOpen(!menuOpen);
-            }}
-          />
-          {menuOpen && post.userId === currentUser.id && (
+          {currentUser && (
+            <MoreHorizIcon
+              onClick={() => {
+                setMenuOpen(!menuOpen);
+              }}
+            />
+          )}
+          {menuOpen && currentUser?.id === post.userId && (
             <button onClick={handleDelete} style={{ borderRadius: "4px" }}>
               删除
             </button>
@@ -90,34 +135,49 @@ const Post = ({ post }) => {
 
         <div className="content">
           <p>{post.desc}</p>
-          <img src={"/upload/" + post.img} alt="" />
+          {post.img && <img src={"/upload/" + post.img} alt="" />}
         </div>
 
         <div className="info">
           <div className="item">
             {isLikesLoading ? (
               "加载中"
-            ) : likesData.includes(currentUser.id) ? (
-              <FavoriteOutlinedIcon
-                style={{ color: "red" }}
-                onClick={handleLike}
-              />
+            ) : currentUser ? (
+              likesData?.includes(currentUser.id) ? (
+                <FavoriteOutlinedIcon
+                  style={{ color: "red" }}
+                  onClick={handleLike}
+                />
+              ) : (
+                <FavoriteBorderOutlinedIcon onClick={handleLike} />
+              )
             ) : (
               <FavoriteBorderOutlinedIcon onClick={handleLike} />
             )}
             {likesData?.length} 喜欢
           </div>
-          <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
+          <div className="item" onClick={handleCommentClick}>
             <TextsmsOutlinedIcon />
             {isCommentsLoading ? "加载中" : commentsData?.length} 评论
           </div>
-          <div className="item">
+          <div className="item" onClick={handleShareClick}>
             <ShareOutlinedIcon />
             分享
           </div>
         </div>
 
         {commentOpen && <Comments postId={post.id} />}
+
+        {/* 提示框，当用户未登录时显示 */}
+        {alertVisible && (
+          <Alert
+            message={alertMessage}
+            type="warning"
+            showIcon
+            closable
+            onClose={() => setAlertVisible(false)} // 提示框关闭时设置为不可见
+          />
+        )}
       </div>
     </div>
   );

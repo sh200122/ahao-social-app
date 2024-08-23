@@ -8,6 +8,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/free-mode";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
 
 moment.updateLocale("zh-cn", {
   relativeTime: {
@@ -29,6 +31,13 @@ moment.updateLocale("zh-cn", {
 });
 
 const Stories = () => {
+  const { currentUser } = useContext(AuthContext); // 获取当前用户的认证状态
+
+  // 如果用户未登录，直接返回 null，不渲染该组件
+  if (!currentUser) {
+    return null;
+  }
+
   const { isLoading, error, data } = useQuery({
     queryKey: ["stories"],
     queryFn: () =>
@@ -49,7 +58,7 @@ const Stories = () => {
         freeMode={true}
         autoplay={{
           delay: 2000,
-          disableOnInteraction: true,
+          pauseOnMouseEnter: true,
         }}
         modules={[FreeMode, Autoplay]}
         className="mySwiper"

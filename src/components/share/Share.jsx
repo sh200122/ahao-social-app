@@ -3,13 +3,20 @@ import Image from "../../assets/img.png";
 import Map from "../../assets/map.png";
 import Friend from "../../assets/friend.png";
 import { useContext, useState } from "react";
-import { AuthContext } from "../../context/authContext.jsx";
+import { AuthContext } from "../../context/authContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
+import { useNavigate } from "react-router-dom"; // 导入 useNavigate 钩子
+import { message } from "antd";
 
 const Share = () => {
   const [file, setFile] = useState(null);
   const [desc, setDesc] = useState("");
+
+  const { currentUser } = useContext(AuthContext);
+  const navigate = useNavigate(); // 初始化 useNavigate
+
+  const queryClient = useQueryClient();
 
   const upload = async () => {
     try {
@@ -21,10 +28,6 @@ const Share = () => {
       console.log(err);
     }
   };
-
-  const { currentUser } = useContext(AuthContext);
-
-  const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationKey: ["posts"],
@@ -38,6 +41,14 @@ const Share = () => {
 
   const handleClick = async (e) => {
     e.preventDefault();
+    if (!currentUser) {
+      navigate("/login"); // 未登录时导航到登录页面
+      return;
+    }
+    if (!desc.trim()) {
+      message.warning("内容不能为空！");
+      return;
+    }
     let imgURL = "";
     if (file) imgURL = await upload();
     mutation.mutate({ desc, img: imgURL });
@@ -50,12 +61,20 @@ const Share = () => {
       <div className="container">
         <div className="top">
           <div className="left">
-            <img src={"/upload/" + currentUser.profilePic} alt="" />
+            {currentUser && ( // 确保 currentUser 存在时才渲染头像
+              <img src={"/upload/" + currentUser.profilePic} alt="" />
+            )}
             <input
               type="text"
-              placeholder={`你想写点什么 ${currentUser.name}?`}
+              placeholder={
+                currentUser
+                  ? `你想写点什么 ${currentUser.name}?`
+                  : "请先登录后再发布内容！"
+              }
               onChange={(e) => setDesc(e.target.value)}
               value={desc}
+              disabled={!currentUser} // 未登录时禁用输入框
+              style={{ fontSize: currentUser ? "initial" : "20px" }} // 根据登录状态调整字体大小
             />
           </div>
           <div className="right">
@@ -72,6 +91,7 @@ const Share = () => {
               id="file"
               style={{ display: "none" }}
               onChange={(e) => setFile(e.target.files[0])}
+              disabled={!currentUser} // 未登录时禁用上传文件
             />
             <label htmlFor="file">
               <div className="item">
@@ -89,7 +109,10 @@ const Share = () => {
             </div>
           </div>
           <div className="right">
-            <button onClick={handleClick}>分享</button>
+            <button onClick={handleClick} disabled={!currentUser}>
+              分享
+            </button>{" "}
+            {/* 未登录时禁用分享按钮 */}
           </div>
         </div>
       </div>

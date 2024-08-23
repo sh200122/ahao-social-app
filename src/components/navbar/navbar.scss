@@ -29,28 +29,31 @@
         font-size: 20px;
         color: themed("logo");
       }
+    }
 
-      .search {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border: 1px solid themed("border");
-        border-radius: 5px;
-        padding: 5px;
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid themed("border");
+      border-radius: 5px;
+      padding: 5px;
 
-        input {
-          border: none;
-          width: 500px;
-          background-color: transparent;
-          color: themed("textColor");
+      input {
+        border: none;
+        width: 500px;
+        background-color: transparent;
+        color: themed("textColor");
+        font-size: 16px;
+        padding: 5px 10px; // 为输入框增加内边距
+        outline: none;
 
-          @include mobile {
-            display: none;
-          }
+        @include mobile {
+          width: 100%; // 适应小屏幕
+        }
 
-          @include tablet {
-            width: 200px;
-          }
+        @include tablet {
+          width: 200px;
         }
       }
     }
@@ -61,7 +64,7 @@
       gap: 20px;
 
       @include mobile {
-        display: none;
+        display: none; // 在小屏幕上隐藏
       }
 
       .user {
@@ -79,9 +82,6 @@
           height: 30px;
           border-radius: 50%;
           object-fit: cover;
-        }
-
-        span {
         }
       }
     }

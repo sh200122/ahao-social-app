@@ -9,7 +9,7 @@ const RightBar = () => {
           <div className="user">
             <div className="userInfo">
               <img
-                src="http://localhost:3000/upload/1723638560668wonder.webp"
+                src="https://ahao-social-app.pages.dev//upload/1723638560668wonder.webp"
                 alt=""
               />
               <span>石七</span>
@@ -22,7 +22,7 @@ const RightBar = () => {
           <div className="user">
             <div className="userInfo">
               <img
-                src="http://localhost:3000/upload/1723709410976sos.webp"
+                src="https://ahao-social-app.pages.dev//upload/1723709410976sos.webp"
                 alt=""
               />
               <span>陈八</span>
@@ -38,7 +38,7 @@ const RightBar = () => {
           <div className="user">
             <div className="userInfo">
               <img
-                src="http://localhost:3000/upload/1723620036731afterhours.webp"
+                src="https://ahao-social-app.pages.dev//upload/1723620036731afterhours.webp"
                 alt=""
               />
               <p>
@@ -50,7 +50,7 @@ const RightBar = () => {
           <div className="user">
             <div className="userInfo">
               <img
-                src="http://localhost:3000/upload/1723640318403one%20more%20light.webp"
+                src="https://ahao-social-app.pages.dev//upload/1723640318403one%20more%20light.webp"
                 alt=""
               />
               <p>
@@ -62,7 +62,7 @@ const RightBar = () => {
           <div className="user">
             <div className="userInfo">
               <img
-                src="http://localhost:3000/upload/1723620407481more%20life.webp"
+                src="https://ahao-social-app.pages.dev//upload/1723620407481more%20life.webp"
                 alt=""
               />
               <p>
@@ -74,7 +74,7 @@ const RightBar = () => {
           <div className="user">
             <div className="userInfo">
               <img
-                src="http://localhost:3000/upload/1723638592389memories.webp"
+                src="https://ahao-social-app.pages.dev//upload/1723638592389memories.webp"
                 alt=""
               />
               <p>
@@ -89,7 +89,7 @@ const RightBar = () => {
           <div className="user">
             <div className="userInfo">
               <img
-                src="http://localhost:3000/upload/1723620338064justice.webp"
+                src="https://ahao-social-app.pages.dev//upload/1723620338064justice.webp"
                 alt=""
               />
               <div className="online" />
@@ -99,7 +99,7 @@ const RightBar = () => {
           <div className="user">
             <div className="userInfo">
               <img
-                src="http://localhost:3000/upload/1723640318403one%20more%20light.webp"
+                src="https://ahao-social-app.pages.dev//upload/1723640318403one%20more%20light.webp"
                 alt=""
               />
               <div className="online" />
@@ -109,7 +109,7 @@ const RightBar = () => {
           <div className="user">
             <div className="userInfo">
               <img
-                src="http://localhost:3000/upload/1723620407481more%20life.webp"
+                src="https://ahao-social-app.pages.dev//upload/1723620407481more%20life.webp"
                 alt=""
               />
               <div className="online" />
@@ -119,7 +119,7 @@ const RightBar = () => {
           <div className="user">
             <div className="userInfo">
               <img
-                src="http://localhost:3000/upload/1723638592389memories.webp"
+                src="https://ahao-social-app.pages.dev//upload/1723638592389memories.webp"
                 alt=""
               />
               <div className="online" />
