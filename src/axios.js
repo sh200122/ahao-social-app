@@ -1,5 +1,5 @@
 import axios from "axios";
 export const makeRequest = axios.create({
-  baseURL: "http://localhost:8000/api/",
+  baseURL: "https://ahao-social-app.pages.dev/api/",
   withCredentials: true,
 });
