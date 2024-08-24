@@ -25,6 +25,7 @@ const Share = () => {
       const res = await makeRequest.post("/upload", formData);
       return res.data;
     } catch (err) {
+      message.error("文件上传失败，请检查网络连接或稍后重试。");
       console.log(err);
     }
   };
@@ -52,6 +53,7 @@ const Share = () => {
     let imgURL = "";
     if (file) imgURL = await upload();
     mutation.mutate({ desc, img: imgURL });
+    // 清除文件和输入
     setDesc("");
     setFile(null);
   };
