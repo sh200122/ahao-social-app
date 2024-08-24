@@ -18,10 +18,13 @@ const Posts = ({ userId }) => {
     return <p>发生错误: {error.message}</p>;
   }
 
+  // 设置默认值为空数组
+  const postsData = Array.isArray(data) ? data : [];
+
   return (
     <div className="posts">
-      {data && data.length > 0 ? (
-        data.map((post) => <Post post={post} key={post.id} />)
+      {postsData.length > 0 ? (
+        postsData.map((post) => <Post post={post} key={post.id} />)
       ) : (
         <p>暂无帖子</p>
       )}
