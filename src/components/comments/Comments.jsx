@@ -38,10 +38,13 @@ const Comments = ({ postId }) => {
     setDesc("");
   };
 
+  // Ensure data is an array
+  const commentsData = Array.isArray(data) ? data : [];
+
   return (
     <div className="comments">
       <div className="write">
-        {currentUser && ( // 确保 currentUser 存在时才渲染用户头像
+        {currentUser && (
           <img src={"/upload/" + currentUser.profilePic} alt="Profile" />
         )}
         <input
@@ -55,11 +58,9 @@ const Comments = ({ postId }) => {
 
       {isLoading
         ? "加载中..."
-        : data.map((comment) => (
+        : commentsData.map((comment) => (
             <div className="comment" key={comment.id}>
-              {currentUser && ( // 确保 currentUser 存在时才渲染用户头像
-                <img src={"/upload/" + currentUser.profilePic} alt="Profile" />
-              )}
+              <img src={"/upload/" + comment.profilePic} alt="Profile" />
               <div className="info">
                 <span>{comment.name}</span>
                 <p>{comment.desc}</p>

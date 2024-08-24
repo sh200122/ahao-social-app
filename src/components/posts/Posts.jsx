@@ -5,10 +5,13 @@ import { makeRequest } from "../../axios";
 
 const Posts = ({ userId }) => {
   const { data, error, isLoading } = useQuery({
-    queryKey: ["posts"],
+    queryKey: ["posts", userId],
     queryFn: () =>
       makeRequest.get("/posts?userId=" + userId).then((res) => res.data),
   });
+
+  // Ensure data is an array
+  const postsData = Array.isArray(data) ? data : [];
 
   if (isLoading) {
     return <p>加载中...</p>;
@@ -17,9 +20,6 @@ const Posts = ({ userId }) => {
   if (error) {
     return <p>发生错误: {error.message}</p>;
   }
-
-  // 设置默认值为空数组
-  const postsData = Array.isArray(data) ? data : [];
 
   return (
     <div className="posts">

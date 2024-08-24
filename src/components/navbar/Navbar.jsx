@@ -36,7 +36,7 @@ const Navbar = () => {
 
   const handleSearchHistoryClick = (item) => {
     setSearchInput(item);
-    handleSearchSubmit(item); // 调用搜索提交方法
+    handleSearchSubmit(item);
   };
 
   const handleSearchSubmit = (searchTerm) => {
@@ -54,7 +54,6 @@ const Navbar = () => {
     }
   };
 
-  // 定义 handleClearHistory 函数
   const handleClearHistory = () => {
     setSearchHistory([]);
     localStorage.removeItem("searchHistory");

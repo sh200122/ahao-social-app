@@ -31,9 +31,8 @@ moment.updateLocale("zh-cn", {
 });
 
 const Stories = () => {
-  const { currentUser } = useContext(AuthContext); // 获取当前用户的认证状态
+  const { currentUser } = useContext(AuthContext);
 
-  // 如果用户未登录，直接返回 null，不渲染该组件
   if (!currentUser) {
     return null;
   }
@@ -46,7 +45,10 @@ const Stories = () => {
       }),
   });
 
-  if (!data || data.length === 0 || isLoading || error) {
+  // Ensure data is an array
+  const storiesData = Array.isArray(data) ? data : [];
+
+  if (isLoading || error || storiesData.length === 0) {
     return null;
   }
 
@@ -63,7 +65,7 @@ const Stories = () => {
         modules={[FreeMode, Autoplay]}
         className="mySwiper"
       >
-        {data.map((story) => (
+        {storiesData.map((story) => (
           <SwiperSlide key={story.id}>
             <Link
               to={`/profile/${story.userId}`}

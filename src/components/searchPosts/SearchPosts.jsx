@@ -12,6 +12,9 @@ const SearchPosts = ({ searchQuery }) => {
         .then((res) => res.data),
   });
 
+  // Ensure data is an array
+  const searchData = Array.isArray(data) ? data : [];
+
   if (isLoading) {
     return <p>加载中...</p>;
   }
@@ -22,8 +25,8 @@ const SearchPosts = ({ searchQuery }) => {
 
   return (
     <div className="posts">
-      {data && data.length > 0 ? (
-        data.map((post) => <Post post={post} key={post.id} />)
+      {searchData.length > 0 ? (
+        searchData.map((post) => <Post post={post} key={post.id} />)
       ) : (
         <p>暂无相关内容</p>
       )}
